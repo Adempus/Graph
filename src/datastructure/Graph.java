@@ -5,7 +5,6 @@ import java.util.*;
 public abstract class Graph<T, V extends Comparable<V>>
 {
     protected Map<Node<T>, Set<Edge<V>>> adjacencyList;
-
     public Graph() {
         this.adjacencyList = new HashMap<>();
     }
@@ -15,7 +14,7 @@ public abstract class Graph<T, V extends Comparable<V>>
         addNode(initialNode);
     }
 
-    /** overloaded convenience methods for basic abstract operations */
+    /** overloaded convenience methods for basic abstract operations. */
 
     public void addNode(T item) {
         addNode(new Node<>(item));
@@ -38,7 +37,7 @@ public abstract class Graph<T, V extends Comparable<V>>
     }
 
     public boolean nodeExists(Node<T> node) {
-        return adjacencyList.containsKey(node);
+        return node != null && adjacencyList.containsKey(node);
     }
 
     public int size() {
@@ -58,6 +57,12 @@ public abstract class Graph<T, V extends Comparable<V>>
         return getWeight(getNode(item1), getNode(item2));
     }
 
+    /**
+     * @param origin -the node to verify adjacency to destination.
+     * @param dest   -node to verify adjacency to origin.
+     *
+     * @return true if an edge exists between origin and dest; false otherwise.
+     */
     public V getWeight(Node<T> origin, Node<T> dest) {
         if (!nodeExists(origin) || !nodeExists(dest)) return null;
 
@@ -94,6 +99,7 @@ public abstract class Graph<T, V extends Comparable<V>>
         return graphString.toString();
     }
 
+    /** Represents an object-containing node of type 'T' as a reference in the graph. */
     public static class Node<T> {
         private T item;
         private Comparable cost;
@@ -122,6 +128,7 @@ public abstract class Graph<T, V extends Comparable<V>>
         }
     }
 
+    /** Represents a single one-to-one connection between two nodes in a graph. **/
     public static class Edge<V extends Comparable> implements Comparable<Edge> {
         private Node originNode;
         private V weight;

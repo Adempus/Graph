@@ -70,9 +70,7 @@ public class Tests {
         testRemoveNode(testGraph, 'R');
         testRemoveNode(testGraph, 'Q');
         testRemoveNode(testGraph, 'P');
-
-       // testRemoveEdge(testGraph);
-
+        testRemoveEdge(testGraph);
     }
 
     public static void testRemoveNode(Graph graph, Comparable key) {
@@ -85,6 +83,10 @@ public class Tests {
     public static void testRemoveEdge(Graph graph) {
         System.out.println("\nRemoving edge between L and M");
         graph.removeEdge('L', 'M');
+        System.out.println(graph);
+
+        System.out.println("\nRemoving edge between M and T");
+        graph.removeEdge('M', 'T');
         System.out.println(graph);
     }
 

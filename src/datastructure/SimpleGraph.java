@@ -20,6 +20,11 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
             adjacencyList.put(newNode, new HashSet<>());
     }
 
+    /** Adds a one-to-one connection between two existing nodes in the graph.
+     *  If a provided node isn't present, then it's created.
+     *  @param fromNode - node to add edge from.
+     *  @param toNode   - node to add edge to.
+     */
     @Override
     public void addEdge(Node<T> fromNode, Node<T> toNode, V weight) {
         if (!nodeExists(fromNode)) addNode(fromNode);
@@ -42,6 +47,9 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
         }
     }
 
+    /** removes an existing node from the graph.
+     *  @param node -a node to remove
+     */
     @Override
     public void removeNode(Node<T> node) {
         if (!nodeExists(node)) return;
@@ -57,21 +65,33 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
         }
     }
 
+    /** @param  origin -the node to verify adjacency to destination.
+     *  @param  dest   -node to verify adjacency to origin.
+     *  @return true if an edge exists between origin and dest; false otherwise.
+     */
     @Override
     public boolean isAdjacent(Node<T> origin, Node<T> dest) {
-        if (origin == null || dest == null) return false;
+        if (!nodeExists(origin) || !nodeExists(dest)) return false;
 
         for (Map.Entry<Node<T>, Set<Edge<V>>> entry : adjacencyList.entrySet()) {
             if (entry.getKey().equals(origin)) {
-                return entry.getValue().stream().anyMatch((Edge<V> e) -> e.getAdjacent().equals(dest));
+                return entry.getValue().stream().anyMatch((Edge e) ->
+                       e.getAdjacent().equals(dest));
             }
         }
         return false;
     }
 
-    //TODO:
     @Override
     public void removeEdge(Node<T> origin, Node<T> dest) {
-
+        if (isAdjacent(origin, dest)) {
+            for (Set<Edge<V>> entry : adjacencyList.values()) {
+                if ((entry.removeIf((Edge<V> e) -> e.getOrigin().equals(origin) &&
+                        e.getAdjacent().equals(dest))))
+                {
+                    removeEdge(dest, origin);
+                }
+            }
+        }
     }
 }
