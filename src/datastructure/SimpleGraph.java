@@ -20,7 +20,8 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
             adjacencyList.put(newNode, new HashSet<>());
     }
 
-    /** Adds a one-to-one connection (edge) between two existing nodes in the graph.
+    /**
+     *  Adds a one-to-one connection (edge) between two existing nodes in the graph.
      *  If a provided node isn't present, then it's added to the graph.
      *  @param fromNode - node to add edge from.
      *  @param toNode   - node to add edge to.
@@ -47,7 +48,8 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
         }
     }
 
-    /** removes an existing node from the graph.
+    /**
+     * removes an existing node from the graph.
      *  @param node -a node to remove
      */
     @Override
@@ -65,7 +67,8 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
         }
     }
 
-    /** @param  origin -the node to verify adjacency to destination.
+    /**
+     *  @param  origin -the node to verify adjacency to destination.
      *  @param  dest   -node to verify adjacency to origin.
      *  @return true if an edge exists between origin and dest; false otherwise.
      */
@@ -75,7 +78,8 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
         return getNeighbors(origin).stream().anyMatch((Edge<V> e) -> e.getAdjacent().equals(dest));
     }
 
-    /** removes an edge connecting two adjacent nodes.
+    /**
+     *  removes an edge connecting two adjacent nodes.
      *  @param origin -the node adjacent to destination.
      *  @param dest   -the node adjacent to origin.
      */

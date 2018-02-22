@@ -5,9 +5,8 @@ import java.util.*;
 public abstract class Graph<T, V extends Comparable<V>>
 {
     protected Map<Node<T>, Set<Edge<V>>> adjacencyList;
-    public Graph() {
-        this.adjacencyList = new HashMap<>();
-    }
+
+    public Graph() { this.adjacencyList = new HashMap<>(); }
 
     public Graph(Node<T> initialNode) {
         this();
@@ -40,17 +39,23 @@ public abstract class Graph<T, V extends Comparable<V>>
         return getWeight(getNode(item1), getNode(item2));
     }
 
-    /** @param  node - a node of type
-     *  @return true if the node exists in the graph, false otherwise. */
+    /**
+     *  @param  node - a node in the graph to check for.
+     *  @return true if the node exists in this graph, false otherwise.
+     */
     public boolean nodeExists(Node<T> node) {
         return node != null && adjacencyList.containsKey(node);
     }
 
+    /**
+     *  @return the number of nodes in this graph.
+     */
     public int size() {
         return this.adjacencyList.size();
     }
 
-    /** @param  item - the object held as a reference in this graph.
+    /**
+     *  @param  item - the object held as a reference in this graph.
      *  @return a node containing the object reference item.
      */
     public Node<T> getNode(T item) {
@@ -63,9 +68,9 @@ public abstract class Graph<T, V extends Comparable<V>>
     }
 
     /**
-     * @param  origin -the node adjacent to destination.
-     * @param  dest   -the node adjacency to origin.
-     * @return Comparable of type <V> representing a quantifiable edge value between two nodes.
+     *  @param  origin -the node adjacent to destination.
+     *  @param  dest   -the node adjacency to origin.
+     *  @return Comparable of type <V> representing a quantifiable edge value between two nodes.
      */
     public V getWeight(Node<T> origin, Node<T> dest) {
         if (!nodeExists(origin) || !nodeExists(dest)) return null;
