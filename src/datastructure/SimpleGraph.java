@@ -20,8 +20,8 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
             adjacencyList.put(newNode, new HashSet<>());
     }
 
-    /** Adds a one-to-one connection between two existing nodes in the graph.
-     *  If a provided node isn't present, then it's created.
+    /** Adds a one-to-one connection (edge) between two existing nodes in the graph.
+     *  If a provided node isn't present, then it's added to the graph.
      *  @param fromNode - node to add edge from.
      *  @param toNode   - node to add edge to.
      */
@@ -72,26 +72,22 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
     @Override
     public boolean isAdjacent(Node<T> origin, Node<T> dest) {
         if (!nodeExists(origin) || !nodeExists(dest)) return false;
-
-        for (Map.Entry<Node<T>, Set<Edge<V>>> entry : adjacencyList.entrySet()) {
-            if (entry.getKey().equals(origin)) {
-                return entry.getValue().stream().anyMatch((Edge e) ->
-                       e.getAdjacent().equals(dest));
-            }
-        }
-        return false;
+        return getNeighbors(origin).stream().anyMatch((Edge<V> e) -> e.getAdjacent().equals(dest));
     }
 
+    /** removes an edge connecting two adjacent nodes.
+     *  @param origin -the node adjacent to destination.
+     *  @param dest   -the node adjacent to origin.
+     */
     @Override
     public void removeEdge(Node<T> origin, Node<T> dest) {
-        if (isAdjacent(origin, dest)) {
-            for (Set<Edge<V>> entry : adjacencyList.values()) {
-                if ((entry.removeIf((Edge<V> e) -> e.getOrigin().equals(origin) &&
-                        e.getAdjacent().equals(dest))))
-                {
-                    removeEdge(dest, origin);
-                }
-            }
+        if (!isAdjacent(origin, dest)) return;
+
+        Set<Edge<V>> neighbors = getNeighbors(origin);
+        if (neighbors.removeIf((Edge<V> e) -> e.getOrigin().equals(origin) &&
+            e.getAdjacent().equals(dest)))
+        {
+            removeEdge(dest, origin);
         }
     }
 }

@@ -36,6 +36,12 @@ public abstract class Graph<T, V extends Comparable<V>>
         return isAdjacent(getNode(origin), getNode(dest));
     }
 
+    public V getWeight(T item1, T item2) {
+        return getWeight(getNode(item1), getNode(item2));
+    }
+
+    /** @param  node - a node of type
+     *  @return true if the node exists in the graph, false otherwise. */
     public boolean nodeExists(Node<T> node) {
         return node != null && adjacencyList.containsKey(node);
     }
@@ -44,6 +50,9 @@ public abstract class Graph<T, V extends Comparable<V>>
         return this.adjacencyList.size();
     }
 
+    /** @param  item - the object held as a reference in this graph.
+     *  @return a node containing the object reference item.
+     */
     public Node<T> getNode(T item) {
         if(!nodeExists(new Node<>(item))) return null;
 
@@ -53,15 +62,10 @@ public abstract class Graph<T, V extends Comparable<V>>
         return null;
     }
 
-    public V getWeight(T item1, T item2) {
-        return getWeight(getNode(item1), getNode(item2));
-    }
-
     /**
-     * @param origin -the node to verify adjacency to destination.
-     * @param dest   -node to verify adjacency to origin.
-     *
-     * @return true if an edge exists between origin and dest; false otherwise.
+     * @param  origin -the node adjacent to destination.
+     * @param  dest   -the node adjacency to origin.
+     * @return Comparable of type <V> representing a quantifiable edge value between two nodes.
      */
     public V getWeight(Node<T> origin, Node<T> dest) {
         if (!nodeExists(origin) || !nodeExists(dest)) return null;
@@ -91,15 +95,13 @@ public abstract class Graph<T, V extends Comparable<V>>
     public String toString() {
         StringBuilder graphString = new StringBuilder();
         for (Map.Entry<Node<T>, Set<Edge<V>>> node : adjacencyList.entrySet()) {
-            Node<T> key = node.getKey();
-            Set<Edge<V>> value = node.getValue();
-            String text = ""+key.toString()+" -> "+value.toString()+"\n";
+            String text = ""+node.getKey().toString()+" -> "+node.getValue().toString()+"\n";
             graphString.append(text);
         }
         return graphString.toString();
     }
 
-    /** Represents an object-containing node of type 'T' as a reference in the graph. */
+    /** Represents an object-containing node of type <T> as a reference in the graph. */
     public static class Node<T> {
         private T item;
         private Comparable cost;
@@ -128,7 +130,7 @@ public abstract class Graph<T, V extends Comparable<V>>
         }
     }
 
-    /** Represents a single one-to-one connection between two nodes in a graph. **/
+    /** Represents a single connection, and weight value between two nodes in a graph. **/
     public static class Edge<V extends Comparable> implements Comparable<Edge> {
         private Node originNode;
         private V weight;
