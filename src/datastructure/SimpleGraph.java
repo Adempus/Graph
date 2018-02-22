@@ -50,8 +50,8 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
             adjacencyList.remove(node);          // then just remove it; simple graph.
             return;
         } else {
-            for (Set<Edge<V>> neighbors : adjacencyList.values()) {
-                neighbors.removeIf(edge -> edge.getAdjacent().equals(node));
+            for (Set<Edge<V>> allEdges : adjacencyList.values()) {
+                allEdges.removeIf(edge -> edge.getAdjacent().equals(node));
             }
             adjacencyList.remove(node);
         }
