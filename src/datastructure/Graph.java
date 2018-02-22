@@ -15,7 +15,7 @@ public abstract class Graph<T, V extends Comparable<V>>
         addNode(initialNode);
     }
 
-    /** overloaded convenience methods for basic abstractions */
+    /** overloaded convenience methods for basic abstract operations */
 
     public void addNode(T item) {
         addNode(new Node<>(item));
