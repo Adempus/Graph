@@ -44,8 +44,9 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
                     entry.getValue().add(new Edge<>(dest, origin, weight));
                     pairsMade++;
                 }
-            } else break;
+            } else { break; }
         }
+        incrementSize();
     }
 
     /**
@@ -58,10 +59,11 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
 
         if (adjacencyList.get(node).isEmpty()) { // if node has no neighbors
             adjacencyList.remove(node);          // then just remove it; simple graph.
-            return;
         } else {
             for (Set<Edge<V>> allEdges : adjacencyList.values()) {
-                allEdges.removeIf(edge -> edge.getAdjacent().equals(node));
+                if (allEdges.removeIf(edge -> edge.getAdjacent().equals(node))) {
+                    decrementSize();
+                }
             }
             adjacencyList.remove(node);
         }
@@ -78,15 +80,17 @@ public class SimpleGraph<T, V extends Comparable<V>> extends Graph<T, V>
         return getNeighbors(origin).stream().anyMatch((Edge<V> e) -> e.getAdjacent().equals(dest));
     }
 
+    @Override
+    public boolean isComplete() {
+        return this.getSize() == (getOrder()*(getOrder()-1))/2;
+    }
     /**
      *  removes an edge connecting two adjacent nodes.
      *  @param origin -the node adjacent to destination.
      *  @param dest   -the node adjacent to origin.
      */
     @Override
-    public void removeEdge(Node<T> origin, Node<T> dest) {
-        if (!isAdjacent(origin, dest)) return;
-
+    protected void removeEdge(Node<T> origin, Node<T> dest) {
         Set<Edge<V>> neighbors = getNeighbors(origin);
         if (neighbors.removeIf((Edge<V> e) -> e.getOrigin().equals(origin) &&
             e.getAdjacent().equals(dest)))

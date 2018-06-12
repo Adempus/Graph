@@ -16,6 +16,7 @@ public class Tests {
 
     public static void testToString(Graph graph) {
         System.out.println(graph.toString());
+        printSizeAndOrder(graph);
     }
 
     public static void testGetAdjacentNodes(Graph graph) {
@@ -55,6 +56,7 @@ public class Tests {
         testGraph.addNode('R');
         testGraph.addNode('M');
         testGraph.addNode('T');
+        System.out.println("Order: "+testGraph.getOrder());
         testGraph.addEdge('A', 'Z', 26.0);
         testGraph.addEdge('G', 'Q', 15.3);
         testGraph.addEdge('R', 'W',23.8);
@@ -74,20 +76,29 @@ public class Tests {
     }
 
     public static void testRemoveNode(Graph graph, Comparable key) {
-        System.out.println("Size pre node removal: " + graph.size());
+        System.out.println("pre node removal: ");
+        printSizeAndOrder(graph);
         System.out.println("Removing node: " +key.toString()+" ...");
         graph.removeNode(key);
-        System.out.println("Size post node removal: "+ graph.size() +"\n"+graph);
+        System.out.println("post node removal: ");
+        printSizeAndOrder(graph);
+    }
+
+    public static void printSizeAndOrder(Graph graph) {
+        System.out.println("Order: "+ graph.getOrder());
+        System.out.println("Size: "+graph.getSize());
     }
 
     public static void testRemoveEdge(Graph graph) {
         System.out.println("\nRemoving edge between L and M");
         graph.removeEdge('L', 'M');
         System.out.println(graph);
+        printSizeAndOrder(graph);
 
         System.out.println("\nRemoving edge between M and T");
         graph.removeEdge('M', 'T');
         System.out.println(graph);
+        printSizeAndOrder(graph);
     }
 
     public static void testNodeEquality() {

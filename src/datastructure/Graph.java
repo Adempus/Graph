@@ -5,6 +5,7 @@ import java.util.*;
 public abstract class Graph<T, V extends Comparable<V>>
 {
     protected Map<Node<T>, Set<Edge<V>>> adjacencyList;
+    private int size;
 
     public Graph() { this.adjacencyList = new HashMap<>(); }
 
@@ -13,7 +14,7 @@ public abstract class Graph<T, V extends Comparable<V>>
         addNode(initialNode);
     }
 
-    /** overloaded convenience methods for basic abstract operations. */
+    /** overloaded convenience methods for abstract operations. */
 
     public void addNode(T item) {
         addNode(new Node<>(item));
@@ -28,7 +29,12 @@ public abstract class Graph<T, V extends Comparable<V>>
     }
 
     public void removeEdge(T origin, T dest) {
-        removeEdge(new Node<>(origin), new Node<>(dest));
+        Node<T> org = new Node<>(origin);
+        Node<T> des= new Node<>(dest);
+        if (isAdjacent(org, des)) {
+            removeEdge(new Node<>(origin), new Node<>(dest));
+            decrementSize();
+        }
     }
 
     public boolean isAdjacent(T origin, T dest) {
@@ -50,7 +56,7 @@ public abstract class Graph<T, V extends Comparable<V>>
     /**
      *  @return the number of nodes in this graph.
      */
-    public int size() {
+    public int getOrder() {
         return this.adjacencyList.size();
     }
 
@@ -90,12 +96,19 @@ public abstract class Graph<T, V extends Comparable<V>>
         return (node == null) ? null : adjacencyList.get(node);
     }
 
-    public abstract void addNode(Node<T> node);
-    public abstract void addEdge(Node<T> origin, Node<T> dest, V weight);
-    public abstract void removeNode(Node<T> node);
-    public abstract void removeEdge(Node<T> origin, Node<T> dest);
-    public abstract boolean isAdjacent(Node<T> origin, Node<T> dest);
+    /** @return the number of edges in this graph. */
+    public int getSize() {
+        return this.size;
+    }
 
+    protected abstract void addNode(Node<T> node);
+    protected abstract void addEdge(Node<T> origin, Node<T> dest, V weight);
+    protected abstract void removeNode(Node<T> node);
+    protected abstract void removeEdge(Node<T> origin, Node<T> dest);
+    protected abstract boolean isAdjacent(Node<T> origin, Node<T> dest);
+    public abstract boolean isComplete();
+    protected void incrementSize() { this.size++; }
+    protected void decrementSize() { this.size--; }
     @Override
     public String toString() {
         StringBuilder graphString = new StringBuilder();
@@ -106,10 +119,12 @@ public abstract class Graph<T, V extends Comparable<V>>
         return graphString.toString();
     }
 
-    /** Represents an object-containing node of type <T> as a reference in the graph. */
+    /** Represents an object-containing node of type <T> as a reference in the graph.
+     */
     public static class Node<T> {
         private T item;
         private Comparable cost;
+        private int degree;
 
         public Node(T item) {
             setItem(item);
@@ -117,9 +132,16 @@ public abstract class Graph<T, V extends Comparable<V>>
         }
 
         public T getItem() { return this.item; }
+
         public void setItem(T newItem) { this.item = newItem; }
+
         public void setCost(Comparable newCost) { this.cost = newCost; }
+
         public Comparable getCost() { return this.cost; }
+
+        public int getDegree() { return this.degree; }
+
+        protected void incrementDegree() { this.degree++; }
 
         @Override
         public boolean equals(Object o) {
@@ -136,7 +158,8 @@ public abstract class Graph<T, V extends Comparable<V>>
     }
 
     /** Represents a single connection, and weight value between two nodes in a graph. **/
-    public static class Edge<V extends Comparable> implements Comparable<Edge> {
+    public static class Edge<V extends Comparable> implements Comparable<Edge>
+    {
         private Node originNode;
         private V weight;
         private Node adjacentNode;
@@ -145,6 +168,8 @@ public abstract class Graph<T, V extends Comparable<V>>
             this.originNode = origin;
             this.adjacentNode = adjacent;
             this.weight = weight;
+            this.originNode.incrementDegree();
+            this.adjacentNode.incrementDegree();
         }
 
         public V getWeight() { return weight; }
